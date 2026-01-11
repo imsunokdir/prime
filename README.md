@@ -62,8 +62,8 @@ VITE_API_URL=http://localhost:8000
 
 4. **Start the Backend Server**:
    npm run dev
-
-5.**Start the Frontend Server**:
+   
+5. **Start the Frontend Server**:
    npm run dev
 
 
