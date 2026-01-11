@@ -47,7 +47,8 @@ A **React-based task management dashboard** with full CRUD functionality, search
    yarn install
 
 3. **Configure environment variables**:
-  ```backend env
+  ```env
+backend env
 PORT=8000
 MONGO_URI=<Your MongoDB connection string>
 SALT=10
@@ -56,7 +57,13 @@ CLIENT_URL=http://localhost:5173
 
 frontend env
 VITE_API_URL=http://localhost:8000
+```
 
+4. **Start the Backend Server**:
+   npm run dev
+
+5.**Start the Frontend Server**:
+   npm run dev
 
 
 
