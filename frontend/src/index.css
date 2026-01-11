@@ -9,3 +9,8 @@
 .animate-shimmer {
   animation: shimmer 1.5s infinite;
 }
+
+html,
+body {
+  overflow-x: hidden;
+}

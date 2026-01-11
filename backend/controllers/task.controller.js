@@ -17,10 +17,50 @@ const createTask = async (req, res) => {
 };
 
 // Get all tasks for user
+// const getTasks = async (req, res) => {
+//   try {
+//     const tasks = await Task.find({ user: req.user._id });
+//     res.json(tasks);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
+
 const getTasks = async (req, res) => {
   try {
-    const tasks = await Task.find({ user: req.user._id });
-    res.json(tasks);
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+
+    // Base query
+    const query = { user: req.user._id };
+
+    // If pagination params are NOT provided → return all tasks
+    if (!page || !limit) {
+      const tasks = await Task.find(query).sort({ createdAt: -1 });
+      return res.json({
+        tasks,
+        total: tasks.length,
+        paginated: false,
+      });
+    }
+
+    // Pagination logic
+    const skip = (page - 1) * limit;
+
+    const [tasks, total] = await Promise.all([
+      Task.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit),
+      Task.countDocuments(query),
+    ]);
+
+    res.json({
+      tasks,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+      paginated: true,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });

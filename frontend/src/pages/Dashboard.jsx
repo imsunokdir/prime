@@ -1,24 +1,60 @@
-import { useContext, useMemo, useState } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
+import { useContext } from "react";
 import DashHeader from "../components/DashHeader";
 import AddTaskForm from "../components/AddTaskForm";
 import SearchBar from "../components/SearchBar";
 import TaskList from "../components/TaskList";
 import { AuthContext } from "../context/AuthContext";
-import { TaskContext } from "../context/TaskContext";
+import { useTasks } from "../hooks/useTasks";
+import TaskSkeleton from "../components/TaskSkeleton";
 
 const Dashboard = () => {
   const { user, logout, isLoggingOut } = useContext(AuthContext);
-  const { tasks, addTask, editTask, removeTask, loading } =
-    useContext(TaskContext);
+  const loadMoreRef = useRef(null);
 
   const [search, setSearch] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
   const [updatingTaskId, setUpdatingTaskId] = useState(null);
 
+  const {
+    tasks,
+    hasMore,
+    loading,
+    loadingMore,
+    addTask,
+    editTask,
+    removeTask,
+    loadMore,
+    limit,
+  } = useTasks();
+
+  // Scroll to loading skeleton when loading more
+  useEffect(() => {
+    if (loadingMore && loadMoreRef.current) {
+      setTimeout(() => {
+        loadMoreRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+        });
+      }, 100);
+    }
+  }, [loadingMore]);
+
+  // Client-side filtering (only for search/date)
   const filteredTasks = useMemo(() => {
-    return tasks.filter((t) =>
-      t.title.toLowerCase().includes(search.toLowerCase())
-    );
-  }, [tasks, search]);
+    return tasks.filter((t) => {
+      const matchesSearch = t.title
+        .toLowerCase()
+        .includes(search.toLowerCase());
+
+      if (!dateFilter) return matchesSearch;
+
+      const taskDate = new Date(t.createdAt).toISOString().split("T")[0];
+      const matchesDate = taskDate === dateFilter;
+
+      return matchesSearch && matchesDate;
+    });
+  }, [tasks, search, dateFilter]);
 
   const handleUpdateTask = async (taskId, updates) => {
     setUpdatingTaskId(taskId);
@@ -35,6 +71,8 @@ const Dashboard = () => {
       handleUpdateTask(taskId, { completed: !task.completed });
     }
   };
+
+  const clearDateFilter = () => setDateFilter("");
 
   if (loading) {
     return (
@@ -62,16 +100,118 @@ const Dashboard = () => {
 
       <main className="max-w-4xl mx-auto px-6 pb-12">
         <AddTaskForm onAdd={addTask} />
-        <SearchBar value={search} onChange={setSearch} />
 
-        <TaskList
-          tasks={filteredTasks}
-          onDelete={removeTask}
-          onToggle={handleToggleComplete}
-          onUpdate={handleUpdateTask}
-          updatingTaskId={updatingTaskId}
-        />
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex-1">
+            <SearchBar value={search} onChange={setSearch} />
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="date"
+              value={dateFilter}
+              onChange={(e) => setDateFilter(e.target.value)}
+              className="px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+            />
+            {dateFilter && (
+              <button
+                onClick={clearDateFilter}
+                className="px-3 py-2.5 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+                title="Clear date filter"
+              >
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {dateFilter && (
+          <div className="mb-4 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-700 flex items-center justify-between">
+            <span>
+              Showing tasks created on{" "}
+              {new Date(dateFilter).toLocaleDateString("en-US", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </span>
+            <button
+              onClick={clearDateFilter}
+              className="text-blue-600 hover:text-blue-800 font-medium"
+            >
+              Clear filter
+            </button>
+          </div>
+        )}
+
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="p-3">
+            <TaskList
+              tasks={filteredTasks}
+              onDelete={removeTask}
+              onToggle={handleToggleComplete}
+              onUpdate={handleUpdateTask}
+              updatingTaskId={updatingTaskId}
+            />
+
+            {/* Loading skeleton */}
+            {loadingMore && (
+              <div ref={loadMoreRef} className="space-y-3 mt-3">
+                {Array.from({ length: limit }).map((_, index) => (
+                  <TaskSkeleton key={index} />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {hasMore && (
+            <div className="border-t border-gray-200 p-4">
+              <button
+                onClick={loadMore}
+                disabled={loadingMore}
+                className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors font-medium flex items-center justify-center gap-2"
+              >
+                {loadingMore ? (
+                  <>
+                    <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    Loading more tasks...
+                  </>
+                ) : (
+                  <>
+                    <svg
+                      className="h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                    Load More Tasks
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+        </div>
       </main>
+      <div className="mt-100"></div>
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import axiosInstance from "../api/axios";
 
 // Get all tasks
-export const fetchTasks = async () => {
-  const res = await axiosInstance.get("/tasks");
+export const fetchTasks = async (page = 1, limit = 5) => {
+  const res = await axiosInstance.get(`/tasks?page=${page}&limit=${limit}`);
   return res.data;
 };
 

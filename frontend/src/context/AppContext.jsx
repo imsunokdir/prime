@@ -1,11 +1,16 @@
+import { QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./AuthContext";
 import { TaskProvider } from "./TaskContext";
+import { queryClient } from "../queryClient";
 
 const AppProvider = ({ children }) => {
   return (
-    <AuthProvider>
-      <TaskProvider>{children}</TaskProvider>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        {/* <TaskProvider>{children}</TaskProvider> */}
+        {children}
+      </AuthProvider>
+    </QueryClientProvider>
   );
 };
 

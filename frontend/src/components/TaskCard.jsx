@@ -37,7 +37,6 @@ const TaskCard = ({ task, onDelete, onToggle, onUpdate, isUpdating }) => {
 
   const handleSaveEdit = async () => {
     if (!editTitle.trim()) return;
-
     setIsSaving(true);
     try {
       await onUpdate(task._id, {
@@ -47,6 +46,7 @@ const TaskCard = ({ task, onDelete, onToggle, onUpdate, isUpdating }) => {
       setIsEditing(false);
     } catch (error) {
       // Handle error if needed
+      console.log("update error:", error);
     } finally {
       setIsSaving(false);
     }
