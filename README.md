@@ -58,6 +58,8 @@ CLIENT_URL=http://localhost:5173
 frontend env
 VITE_API_URL=http://localhost:8000
 ```
+
+
 4. **Start the Backend Server**:
    npm run dev
 
