@@ -54,7 +54,7 @@ SALT=10
 JWT_SECRET=<Your JWT secret>
 CLIENT_URL=http://localhost:5173
 
-```frontend env
+frontend env
 VITE_API_URL=http://localhost:8000
 
 
