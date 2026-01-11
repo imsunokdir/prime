@@ -1,4 +1,4 @@
-# Task Dashboard App
+# Task App
 
 A **React-based task management dashboard** with full CRUD functionality, search, date filtering, and pagination. The app uses **React Query** for data fetching and cache management, and **Tailwind CSS** for styling. Users can add, edit, delete, and mark tasks as complete, with smooth loading and infinite scroll support.
 
