@@ -68,7 +68,49 @@ VITE_API_URL=http://localhost:8000
 
 
 
+## Postman Collection & Environment
 
+### To test all API endpoints and verify functionality:
+
+- **Postman Collection:** PrimeTrade.ai assignment api.postman_collection
+
+- Includes all requests for Auth, Users, and Tasks
+
+- Each request has tests included (status checks, variable storage)
+
+- **Postman Environment:** primetrade.ai environment.postman_environment
+
+#### Variables included:
+
+- **base_url** → e.g., http://localhost:5000/api
+
+### Steps to Run:
+
+- Import both the collection and environment into Postman
+
+- Select the environment (AnythingAI-env)
+
+-- Update base_url if your backend runs on a different URL
+
+### Run requests in this order:
+
+Auth → Register
+
+Auth → Login
+
+Users → Get Profile
+
+Users → Update Profile
+
+Tasks → Create Task
+
+Tasks → Get Tasks
+
+Tasks → Update Task
+
+Tasks → Delete Task
+
+TASK_ID is automatically set by the Create Task request for use in subsequent task requests
 
 
 
