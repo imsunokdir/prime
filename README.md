@@ -72,13 +72,13 @@ VITE_API_URL=http://localhost:8000
 
 ### To test all API endpoints and verify functionality:
 
-- **Postman Collection:** [PrimeTrade.ai assignment api.postman_collection](https://drive.google.com/file/d/1bsxWIQ0Xc0xqVJwjSQOLMrrI-TDQdG_O/view?usp=sharing)
+- **Postman Collection:** [PrimeTrade.ai assignment api.postman_collection](https://drive.google.com/file/d/1bsxWIQ0Xc0xqVJwjSQOLMrrI-TDQdG_O/uc?export=download)
 
 - Includes all requests for Auth, Users, and Tasks
 
 - Each request has tests included (status checks, variable storage)
 
-- **Postman Environment:** [primetrade.ai environment.postman_environment](https://drive.google.com/file/d/1JD8PGrUNDlYkkoou6uryz_RBIBGYfUfO/view?usp=sharing)
+- **Postman Environment:** [primetrade.ai environment.postman_environment](https://drive.google.com/file/d/1JD8PGrUNDlYkkoou6uryz_RBIBGYfUfO/uc?export=download)
 
 #### Variables included:
 
