@@ -78,7 +78,7 @@ VITE_API_URL=http://localhost:8000
 
 - Each request has tests included (status checks, variable storage)
 
-- **Postman Environment:** [primetrade.ai environment.postman_environment](https://drive.google.com/file/d/1JD8PGrUNDlYkkoou6uryz_RBIBGYfUfO/uc?export=download)
+- **Postman Environment:** [primetrade.ai environment.postman_environment](https://drive.google.com/uc?export=download&id=1JD8PGrUNDlYkkoou6uryz_RBIBGYfUfO)
 
 #### Variables included:
 
